@@ -1,0 +1,33 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Virtualization Files
+*.vmdk
+*.vbox
+*.vmx
+*.vmem
+*.vmsn
+
+# Logs and Reports
+/reports/*
+/evidence/*
+/samples/*
+!/samples/.gitkeep
+!/evidence/.gitkeep
+!/reports/.gitkeep
+*.log
+*.json
+*.pcap
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Docker
+.dockerignore
+
+# Temporary files
+*~
+#*#
