@@ -1,164 +1,162 @@
-# 🍯 نظام المراقبة المتقدم لشبكات Honeypot (أسابيع 2-4)
+# 🍯 Advanced Honeypot Network Monitoring System (Weeks 2-4)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Ubuntu%2022.04-orange.svg)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)  
+[![Platform](https://img.shields.io/badge/Platform-Ubuntu%2022.04-orange.svg)]()  
 [![Shell](https://img.shields.io/badge/Language-Shell%2FBash-green.svg)]()
 
-حل شامل لنشر ومراقبة أنظمة Honeypot لجمع معلومات التهديدات وتحليل الأنشطة الخبيثة في بيئة معزولة وآمنة. يغطي هذا المشروع إعداد البنية التحتية للشبكة، ونشر أنظمة Honeypot المتعددة، وتكوين نظام مركزي لجمع السجلات وتحليل الأدلة.
+A comprehensive solution for deploying and monitoring Honeypot systems to collect threat intelligence and analyze malicious activity within an isolated, controlled environment. This project covers network infrastructure setup, deployment of multiple honeypots, and the configuration of a centralized logging and evidence analysis system.
 
-## 📋 جدول المحتويات
+## 📋 Table of Contents
 
-- [نظرة عامة (Overview)](#نظرة-عامة-overview)
-- [هيكلية المشروع (Architecture)](#هيكلية-المشروع-architecture)
-- [الميزات الرئيسية (Features)](#الميزات-الرئيسية-features)
-- [المتطلبات الأساسية (Prerequisites)](#المتطلبات-الأساسية-prerequisites)
-- [هيكل المجلدات (Project Structure)](#هيكل-المجلدات-project-structure)
-- [التكوين والاستخدام (Configuration & Usage)](#التكوين-والاستخدام-configuration--usage)
-- [اعتبارات الأمان (Security Considerations)](#اعتبارات-الأمان-security-considerations)
-
----
-
-## 🎯 نظرة عامة (Overview)
-
-### ملخص المشروع
-
-يهدف **مشروع نظام Honeypot** إلى إنشاء بيئة افتراضية معزولة تحاكي خوادم حقيقية لجذب وتسجيل الأنشطة الخبيثة. يتم تحليل هذه الهجمات وتقديم رؤى عميقة لتحسين الأمن السيبراني دون تعريض شبكات الإنتاج للخطر. تشمل المنهجية نشر أنظمة Honeypot وأجهزة مراقبة افتراضية، وجمع وتحليل السجلات، وتوليد تقارير ولوحات معلومات ووثائق شاملة.
-
-### المشكلة (Problem)
-
-تتعرض شبكات وخوادم المؤسسات يوميًا لمحاولات اختراق واعتداءات مختلفة (استغلال تطبيقات الويب، تثبيت البرمجيات الخبيثة، محاولات تسجيل الدخول عبر SSH). من الصعب والمحفوف بالمخاطر مراقبة وتحليل هذه الهجمات على أنظمة الإنتاج الحية.
-
-### الحل (Solution)
-
-يتمثل الحل في نشر بيئة Honeypot معزولة باستخدام أجهزة افتراضية (VMs) تشغل خدمات اختبار وأدوات تسجيل متخصصة. يلتقط نظام Honeypot سلوك المهاجمين، ويتم إرسال هذه البيانات بشكل آمن إلى نظام مراقبة مركزي للتحليل. يتم توليد التنبيهات ولوحات المعلومات والتقارير للكشف عن التهديدات وتقديم توصيات لتحسين إعدادات الأمان. يتم إجراء جميع الاختبارات في بيئة محكومة ومعزولة تمامًا.
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Project Structure](#project-structure)
+- [Configuration & Usage](#configuration--usage)
+- [Security Considerations](#security-considerations)
 
 ---
 
-## 🏗️ هيكلية المشروع (Architecture)
+## 🎯 Overview
 
-يتكون النظام من أربع آلات افتراضية تعمل على شبكة معزولة (VMnet2) لمحاكاة بيئة إنتاج حقيقية.
+### Project Summary
 
-| المكون | نظام التشغيل | عنوان IP | الدور |
-|---|---|---|---|
-| **Honeypot VM** | Ubuntu 22.04 | `192.168.100.10` | نشر Honeypot (Cowrie, Dionaea) والتقاط الحركة الخبيثة. |
-| **Monitoring VM** | Ubuntu 22.04 | `192.168.100.20` | تجميع السجلات (syslog-ng)، التحليل، وإدارة الأدلة. |
-| **Sandbox VM** | Ubuntu 22.04 | `192.168.100.30` | بيئة معزولة لتحليل البرمجيات الخبيثة. |
-| **Attacker VM** | Kali Linux | `192.168.100.50` | محاكاة الهجمات والاختبارات الموجهة. |
+The **Honeypot System Project** aims to build an isolated virtual environment that simulates real servers to attract and record malicious activity. Captured attacks are analyzed to provide actionable insights for improving cybersecurity posture without risking production systems. The methodology includes deploying honeypots and monitoring VMs, collecting and analyzing logs, and producing dashboards, reports, and thorough documentation.
 
----
+### Problem
 
-## ✨ الميزات الرئيسية (Features)
+Production networks and servers are subject to daily attack attempts (web app exploits, malware delivery, SSH brute force, etc.). Observing and analyzing these attacks directly on production systems is risky and impractical.
 
-يغطي هذا المستودع المراحل الأساسية للمشروع من الأسبوع الثاني حتى نهاية الأسبوع الرابع.
+### Solution
 
-### الأسبوع 2: إعداد البنية التحتية
-- ✅ شبكة افتراضية معزولة (VMnet2).
-- ✅ تكوين أربع آلات افتراضية بعناوين IP ثابتة.
-- ✅ سكريبت للتحقق من اتصال الشبكة (`scripts/network-check.sh`).
-- ✅ إنشاء لقطات أساسية للأنظمة (Snapshots).
-
-### الأسبوع 3: نشر Honeypot وتجميع السجلات
-- ✅ نشر Honeypot **Cowrie SSH** على المنفذ 22.
-- ✅ نشر Honeypot **Dionaea** متعدد البروتوكولات (عبر Docker).
-- ✅ تجميع مركزي للسجلات باستخدام `syslog-ng` وإعادة توجيهها إلى Monitoring VM.
-- ✅ سكريبت لمراقبة السجلات وتوليد إحصائيات أساسية (`scripts/monitor-logs.sh`).
-
-### الأسبوع 4: إدارة الأدلة والتحليل المعزول
-- ✅ إعداد بيئة **Sandbox** معزولة على VM منفصلة.
-- ✅ سكريبت لتحليل البرمجيات الخبيثة (`sandbox/analyze.sh`) باستخدام أدوات مثل ClamAV و `strings`.
-- ✅ نظام **سلسلة الحضانة (Chain of Custody)** لتوثيق الأدلة (`scripts/document-sample.sh`).
-- ✅ سكريبت للنقل الآمن للملفات إلى Sandbox مع التحقق من سلامة البيانات (Hashing) (`scripts/transfer-to-sandbox.sh`).
-- ✅ سكريبت شامل للتحقق من صحة النظام بالكامل (`scripts/full-system-check.sh`).
+Deploy an isolated honeypot environment using virtual machines (VMs) running test services and specialized logging tools. The honeypot captures attacker behavior and forwards telemetry securely to a centralized monitoring VM for analysis. Alerts, dashboards, and reports help detect threats and recommend security hardening steps. All testing is performed in a controlled, isolated environment.
 
 ---
 
-## 🔧 المتطلبات الأساسية (Prerequisites)
+## 🏗️ Architecture
 
-### متطلبات الأجهزة:
-- **ذاكرة الوصول العشوائي (RAM):** 12 جيجابايت كحد أدنى (16 جيجابايت موصى بها).
-- **التخزين:** 120 جيجابايت مساحة متوفرة.
-- **المعالج (CPU):** 4 أنوية أو أكثر.
+The system consists of four virtual machines operating on an isolated network (VMnet2) to simulate a realistic production environment.
 
-### متطلبات البرمجيات:
-- برنامج محاكاة افتراضية (مثل VMware Workstation أو VirtualBox).
-- صور ISO/VM لأنظمة التشغيل: Ubuntu 22.04 LTS و Kali Linux.
+| Component | OS | IP Address | Role |
+|---|---:|---:|---|
+| **Honeypot VM** | Ubuntu 22.04 | `192.168.100.10` | Hosts honeypots (Cowrie, Dionaea) and captures malicious traffic. |
+| **Monitoring VM** | Ubuntu 22.04 | `192.168.100.20` | Central log collection (syslog-ng), analysis, and evidence management. |
+| **Sandbox VM** | Ubuntu 22.04 | `192.168.100.30` | Isolated environment for malware analysis. |
+| **Attacker VM** | Kali Linux | `192.168.100.50` | Attack simulation and targeted testing. |
 
 ---
 
-## 📁 هيكل المجلدات (Project Structure)
+## ✨ Features
+
+This repository covers the core stages of the project from Week 2 through Week 4.
+
+### Week 2: Infrastructure Setup
+- ✅ Isolated virtual network (VMnet2).
+- ✅ Configure four VMs with static IP addresses.
+- ✅ Network connectivity check script (`scripts/network-check.sh`).
+- ✅ Base VM snapshots.
+
+### Week 3: Honeypot Deployment & Log Aggregation
+- ✅ Deploy **Cowrie SSH** honeypot (port 22).
+- ✅ Deploy multi-protocol **Dionaea** honeypot (via Docker).
+- ✅ Centralized log collection using `syslog-ng` and forwarding to Monitoring VM.
+- ✅ Log monitoring and basic statistics script (`scripts/monitor-logs.sh`).
+
+### Week 4: Evidence Handling & Isolated Analysis
+- ✅ Setup an isolated **Sandbox** VM for safe malware analysis.
+- ✅ Malware analysis script (`sandbox/analyze.sh`) using tools such as ClamAV and `strings`.
+- ✅ **Chain-of-Custody** evidence documentation (`scripts/document-sample.sh`).
+- ✅ Secure sample transfer script with integrity checks (hashing) (`scripts/transfer-to-sandbox.sh`).
+- ✅ Comprehensive system validation script (`scripts/full-system-check.sh`).
+
+---
+
+## 🔧 Prerequisites
+
+### Hardware requirements:
+- **RAM:** Minimum 12 GB (16 GB recommended).
+- **Storage:** 120 GB free disk space.
+- **CPU:** 4 cores or more.
+
+### Software requirements:
+- Virtualization platform (e.g., VMware Workstation or VirtualBox).
+- VM images/ISOs: Ubuntu 22.04 LTS and Kali Linux.
+
+---
+
+## 📁 Project Structure
 
 ```
 honeypot-system/
-├── docs/                          # وثائق الإعداد والتكوين لكل أسبوع
-│   ├── week2-setup.md             # دليل إعداد البنية التحتية للشبكة
-│   ├── week3-setup.md             # دليل نشر Honeypot وتكوين syslog-ng
-│   └── week4-setup.md             # دليل إعداد Sandbox وإدارة الأدلة
+├── docs/                          # Setup and configuration guides for each week
+│   ├── week2-setup.md             # Network and infrastructure setup guide
+│   ├── week3-setup.md             # Honeypot deployment and syslog-ng configuration
+│   └── week4-setup.md             # Sandbox setup and evidence handling guide
 │
-├── scripts/                       # سكريبتات الأتمتة والمراقبة (تعمل على Monitoring VM)
-│   ├── network-check.sh           # اختبار اتصال الشبكة
-│   ├── monitor-logs.sh            # عرض إحصائيات الهجمات الأساسية
-│   ├── document-sample.sh         # توثيق سلسلة الحضانة للأدلة
-│   ├── transfer-to-sandbox.sh     # نقل آمن للملفات إلى Sandbox
-│   └── full-system-check.sh       # فحص شامل لصحة النظام
+├── scripts/                       # Automation and monitoring scripts (run on Monitoring VM)
+│   ├── network-check.sh           # Network connectivity tests
+│   ├── monitor-logs.sh            # Basic attack statistics and summaries
+│   ├── document-sample.sh         # Start a chain-of-custody record for new evidence
+│   ├── transfer-to-sandbox.sh     # Securely transfer a documented sample to the Sandbox
+│   └── full-system-check.sh       # Full system health and service checks
 │
-├── config/                        # ملفات التكوين لـ Honeypots و syslog-ng
+├── config/                        # Configuration files for honeypots and syslog-ng
 │   ├── honeypot/
-│   │   ├── cowrie-syslog.conf     # تكوين Cowrie syslog-ng (Honeypot VM)
-│   │   └── dionaea-syslog.conf    # تكوين Dionaea syslog-ng (Honeypot VM)
+│   │   ├── cowrie-syslog.conf     # Cowrie syslog-ng config (Honeypot VM)
+│   │   └── dionaea-syslog.conf    # Dionaea syslog-ng config (Honeypot VM)
 │   │
 │   └── monitoring/
-│       └── honeypot-receive.conf  # تكوين استقبال السجلات (Monitoring VM)
+│       └── honeypot-receive.conf  # Log receiver configuration (Monitoring VM)
 │
-├── sandbox/                       # سكريبتات التحليل (تعمل على Sandbox VM)
-│   └── analyze.sh                 # سكريبت تحليل البرمجيات الخبيثة
+├── sandbox/                       # Analysis scripts (run on Sandbox VM)
+│   └── analyze.sh                 # Malware analysis automation script
 │
-├── samples/                       # مجلد لتخزين العينات المجمعة (يتم تجاهله بواسطة Git)
-├── evidence/                      # مجلد لتخزين سجلات سلسلة الحضانة (يتم تجاهله بواسطة Git)
-├── reports/                       # مجلد لتخزين التقارير النهائية (يتم تجاهله بواسطة Git)
-├── .gitignore                     # قواعد تجاهل الملفات
-├── LICENSE                        # ترخيص MIT
-└── README.md                      # هذا الملف
+├── samples/                       # Collected sample storage (gitignored)
+├── evidence/                      # Chain-of-custody records (gitignored)
+├── reports/                       # Final reports (gitignored)
+├── .gitignore                     # Files to ignore in Git
+├── LICENSE                        # MIT License
+└── README.md                      # This file
 ```
 
 ---
 
-## 🚀 التكوين والاستخدام (Configuration & Usage)
+## 🚀 Configuration & Usage
 
-### 1. الاستنساخ
+### 1. Clone
 ```bash
 git clone https://github.com/YourUsername/honeypot-system.git
 cd honeypot-system
 ```
 
-### 2. التنفيذ
-يجب اتباع الإرشادات التفصيلية في مجلد `docs/` لتكوين الآلات الافتراضية ونشر الخدمات.
+### 2. Deployment
+Follow the detailed instructions in the `docs/` folder to configure the VMs and deploy services.
 
-| الأسبوع | الملف | المهمة |
-|---|---|---|
-| **2** | `docs/week2-setup.md` | إعداد الشبكة المعزولة وتكوين IP ثابت. |
-| **3** | `docs/week3-setup.md` | نشر Cowrie و Dionaea وتكوين syslog-ng. |
-| **4** | `docs/week4-setup.md` | إعداد Sandbox ونظام إدارة الأدلة. |
+| Week | Docs File | Task |
+|---:|---|---|
+| **2** | `docs/week2-setup.md` | Set up the isolated network and assign static IPs. |
+| **3** | `docs/week3-setup.md` | Deploy Cowrie and Dionaea, and configure syslog-ng. |
+| **4** | `docs/week4-setup.md` | Prepare the Sandbox and evidence management procedures. |
 
-### 3. سكريبتات المراقبة
-يمكن استخدام السكريبتات التالية على **Monitoring VM** بعد اكتمال الإعداد:
+### 3. Monitoring Scripts
+Use the following scripts on the **Monitoring VM** after the environment is configured:
 
-| السكريبت | الوصف | أمر التنفيذ |
-|---|---|---|
-| `full-system-check.sh` | فحص شامل لجميع مكونات النظام (الشبكة، الخدمات، السجلات). | `./scripts/full-system-check.sh` |
-| `monitor-logs.sh` | عرض إحصائيات الهجمات (عدد محاولات SSH/FTP، أعلى عناوين IP). | `./scripts/monitor-logs.sh` |
-| `document-sample.sh` | بدء عملية توثيق دليل جديد (سلسلة الحضانة). | `./scripts/document-sample.sh` |
-| `transfer-to-sandbox.sh` | نقل عينة تم توثيقها بأمان إلى Sandbox VM. | `./scripts/transfer-to-sandbox.sh` |
-
----
-
-## 🔒 اعتبارات الأمان (Security Considerations)
-
-- **العزل التام للشبكة:** يجب أن تعمل جميع الآلات الافتراضية على شبكة افتراضية خاصة (VMnet2) دون أي اتصال مباشر بالإنترنت أو شبكة المضيف، باستثناء ما يلزم لتحديث النظام الأولي.
-- **إدارة الأدلة:** يجب الحفاظ على سجل دقيق لسلسلة الحضانة لكل عينة يتم جمعها، والتحقق من سلامتها باستخدام قيم التجزئة (Hashes).
-- **التحليل المعزول:** يجب **عدم تشغيل** أي برمجيات خبيثة تم جمعها خارج بيئة Sandbox المخصصة لذلك.
-- **اللقطات (Snapshots):** يوصى بأخذ لقطات للآلات الافتراضية قبل أي تغييرات جوهرية أو بعد كل مرحلة رئيسية.
+| Script | Description | Run command |
+|---|---|---:|
+| `full-system-check.sh` | Comprehensive check of all system components (network, services, logs). | `./scripts/full-system-check.sh` |
+| `monitor-logs.sh` | Produce attack statistics (SSH/FTP attempts, top attacking IP addresses). | `./scripts/monitor-logs.sh` |
+| `document-sample.sh` | Start documenting a new piece of evidence (chain-of-custody). | `./scripts/document-sample.sh` |
+| `transfer-to-sandbox.sh` | Securely transfer a documented sample to the Sandbox VM. | `./scripts/transfer-to-sandbox.sh` |
 
 ---
 
-**المؤلف:** Manus AI (نيابة عنك)
-**التاريخ:** أكتوبر 2025
+## 🔒 Security Considerations
+
+- **Strict network isolation:** Keep all VMs on a private virtual network (VMnet2) with no direct Internet or host network access except for necessary initial updates.
+- **Evidence management:** Maintain accurate chain-of-custody records for each collected sample and verify integrity using cryptographic hashes.
+- **Isolated analysis:** Never execute collected malware outside the dedicated Sandbox environment.
+- **Snapshots:** Take VM snapshots before major changes or after each key milestone.
+
+---
+````
