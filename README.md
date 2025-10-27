@@ -168,5 +168,3 @@ Run these on the **Monitoring VM**:
 * **Evidence Management:** Maintain accurate chain-of-custody; verify integrity via cryptographic hashes.
 * **Isolated Analysis:** Never execute malware outside the Sandbox.
 * **Snapshots:** Take VM snapshots before major changes or after key milestones.
----
-؟
