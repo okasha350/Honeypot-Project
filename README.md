@@ -1,7 +1,7 @@
-# 🍯 Advanced Honeypot Network Monitoring System (Weeks 2-4)
+# 🍯 Advanced Honeypot Network Monitoring System (Weeks 2-5)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)  
-[![Platform](https://img.shields.io/badge/Platform-Ubuntu%2022.04-orange.svg)]()  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)  
+[![Platform](https://img.shields.io/badge/Platform-Ubuntu%2022.04-orange.svg)]()  
 [![Shell](https://img.shields.io/badge/Language-Shell%2FBash-green.svg)]()
 
 A comprehensive solution for deploying and monitoring Honeypot systems to collect threat intelligence and analyze malicious activity within an isolated, controlled environment. This project covers network infrastructure setup, deployment of multiple honeypots, and the configuration of a centralized logging and evidence analysis system.
@@ -49,7 +49,7 @@ The system consists of four virtual machines operating on an isolated network (V
 
 ## ✨ Features
 
-This repository covers the core stages of the project from Week 2 through Week 4.
+This repository covers the core stages of the project from Week 2 through Week **5**.
 
 ### Week 2: Infrastructure Setup
 - ✅ Isolated virtual network (VMnet2).
@@ -70,6 +70,13 @@ This repository covers the core stages of the project from Week 2 through Week 4
 - ✅ Secure sample transfer script with integrity checks (hashing) (`scripts/transfer-to-sandbox.sh`).
 - ✅ Comprehensive system validation script (`scripts/full-system-check.sh`).
 
+### 🌟 Week 5: Log Pipeline Troubleshooting and Finalization
+- ✅ **Resolved Logstash/Docker Conflict:** Fixed the connection issue by using the host machine's IP (`192.168.100.20`).
+- ✅ **Repaired Syslog-ng Configuration:** Configured the missing log forwarding file (`honeypot-receive.conf`).
+- ✅ **Confirmed Honeypot Port:** Identified and utilized Cowrie's actual listening port (**2222**).
+- ✅ **Finalized Kibana Setup:** Created the `honeypot-logs-*` Index Pattern and confirmed live log visibility.
+- ✅ Access to Kibana finalized at: `http://192.168.100.20:5602/`
+
 ---
 
 ## 🔧 Prerequisites
@@ -87,76 +94,13 @@ This repository covers the core stages of the project from Week 2 through Week 4
 
 ## 📁 Project Structure
 
-```
-honeypot-system/
-├── docs/                          # Setup and configuration guides for each week
-│   ├── week2-setup.md             # Network and infrastructure setup guide
-│   ├── week3-setup.md             # Honeypot deployment and syslog-ng configuration
-│   └── week4-setup.md             # Sandbox setup and evidence handling guide
-│
-├── scripts/                       # Automation and monitoring scripts (run on Monitoring VM)
-│   ├── network-check.sh           # Network connectivity tests
-│   ├── monitor-logs.sh            # Basic attack statistics and summaries
-│   ├── document-sample.sh         # Start a chain-of-custody record for new evidence
-│   ├── transfer-to-sandbox.sh     # Securely transfer a documented sample to the Sandbox
-│   └── full-system-check.sh       # Full system health and service checks
-│
-├── config/                        # Configuration files for honeypots and syslog-ng
-│   ├── honeypot/
-│   │   ├── cowrie-syslog.conf     # Cowrie syslog-ng config (Honeypot VM)
-│   │   └── dionaea-syslog.conf    # Dionaea syslog-ng config (Honeypot VM)
-│   │
-│   └── monitoring/
-│       └── honeypot-receive.conf  # Log receiver configuration (Monitoring VM)
-│
-├── sandbox/                       # Analysis scripts (run on Sandbox VM)
-│   └── analyze.sh                 # Malware analysis automation script
-│
-├── samples/                       # Collected sample storage (gitignored)
-├── evidence/                      # Chain-of-custody records (gitignored)
-├── reports/                       # Final reports (gitignored)
-├── .gitignore                     # Files to ignore in Git
-├── LICENSE                        # MIT License
-└── README.md                      # This file
-```
-
+honeypot-system/├── docs/                          # Setup and configuration guides for each week│   ├── week2-setup.md             # Network and infrastructure setup guide│   ├── week3-setup.md             # Honeypot deployment and syslog-ng configuration│   ├── week4-setup.md             # Sandbox setup and evidence handling guide│   └── week5-troubleshooting.md   # Log pipeline troubleshooting and Kibana finalization (New)│├── scripts/                       # Automation and monitoring scripts (run on Monitoring VM)│   ├── network-check.sh           # Network connectivity tests│   ├── monitor-logs.sh            # Basic attack statistics and summaries│   ├── document-sample.sh         # Start a chain-of-custody record for new evidence│   ├── transfer-to-sandbox.sh     # Securely transfer a documented sample to the Sandbox│   └── full-system-check.sh       # Full system health and service checks│├── config/                        # Configuration files for honeypots and syslog-ng│   ├── honeypot/│   │   ├── cowrie-syslog.conf     # Cowrie syslog-ng config (Honeypot VM)│   │   └── dionaea-syslog.conf    # Dionaea syslog-ng config (Honeypot VM)│   ││   └── monitoring/│       └── honeypot-receive.conf  # Log receiver configuration (Monitoring VM)│├── sandbox/                       # Analysis scripts (run on Sandbox VM)│   └── analyze.sh                 # Malware analysis automation script│├── samples/                       # Collected sample storage (gitignored)├── evidence/                      # Chain-of-custody records (gitignored)├── reports/                       # Final reports (gitignored)├── .gitignore                     # Files to ignore in Git├── LICENSE                        # MIT License└── README.md                      # This file
 ---
 
 ## 🚀 Configuration & Usage
 
 ### 1. Clone
 ```bash
-git clone https://github.com/YourUsername/honeypot-system.git
+git clone [https://github.com/YourUsername/honeypot-system.git](https://github.com/YourUsername/honeypot-system.git)
 cd honeypot-system
-```
-
-### 2. Deployment
-Follow the detailed instructions in the `docs/` folder to configure the VMs and deploy services.
-
-| Week | Docs File | Task |
-|---:|---|---|
-| **2** | `docs/week2-setup.md` | Set up the isolated network and assign static IPs. |
-| **3** | `docs/week3-setup.md` | Deploy Cowrie and Dionaea, and configure syslog-ng. |
-| **4** | `docs/week4-setup.md` | Prepare the Sandbox and evidence management procedures. |
-
-### 3. Monitoring Scripts
-Use the following scripts on the **Monitoring VM** after the environment is configured:
-
-| Script | Description | Run command |
-|---|---|---:|
-| `full-system-check.sh` | Comprehensive check of all system components (network, services, logs). | `./scripts/full-system-check.sh` |
-| `monitor-logs.sh` | Produce attack statistics (SSH/FTP attempts, top attacking IP addresses). | `./scripts/monitor-logs.sh` |
-| `document-sample.sh` | Start documenting a new piece of evidence (chain-of-custody). | `./scripts/document-sample.sh` |
-| `transfer-to-sandbox.sh` | Securely transfer a documented sample to the Sandbox VM. | `./scripts/transfer-to-sandbox.sh` |
-
----
-
-## 🔒 Security Considerations
-
-- **Strict network isolation:** Keep all VMs on a private virtual network (VMnet2) with no direct Internet or host network access except for necessary initial updates.
-- **Evidence management:** Maintain accurate chain-of-custody records for each collected sample and verify integrity using cryptographic hashes.
-- **Isolated analysis:** Never execute collected malware outside the dedicated Sandbox environment.
-- **Snapshots:** Take VM snapshots before major changes or after each key milestone.
-
----
-````
+2. DeploymentFollow the detailed instructions in the docs/ folder to configure the VMs and deploy services.WeekDocs FileTask2docs/week2-setup.mdSet up the isolated network and assign static IPs.3docs/week3-setup.mdDeploy Cowrie and Dionaea, and configure syslog-ng.4docs/week4-setup.mdPrepare the Sandbox and evidence management procedures.5docs/week5-troubleshooting.mdResolve log pipeline issues and finalize Kibana setup.3. Monitoring ScriptsUse the following scripts on the Monitoring VM after the environment is configured:ScriptDescriptionRun commandfull-system-check.shComprehensive check of all system components (network, services, logs)../scripts/full-system-check.shmonitor-logs.shProduce attack statistics (SSH/FTP attempts, top attacking IP addresses)../scripts/monitor-logs.shdocument-sample.shStart documenting a new piece of evidence (chain-of-custody)../scripts/document-sample.shtransfer-to-sandbox.shSecurely transfer a documented sample to the Sandbox VM../scripts/transfer-to-sandbox.sh🔒 Security ConsiderationsStrict network isolation: Keep all VMs on a private virtual network (VMnet2) with no direct Internet or host network access except for necessary initial updates.Evidence management: Maintain accurate chain-of-custody records for each collected sample and verify integrity using cryptographic hashes.Isolated analysis: Never execute collected malware outside the dedicated Sandbox environment.Snapshots: Take VM snapshots before major changes or after each key milestone.
